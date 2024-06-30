@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:3.8.9-management-alpine
+    container_name: rabbitmq
+    ports:
+      - '15672:15672'
+      - '15692:15692'
+      - '25676:25672'
+      - '35672:5672'
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=ifmt
+      - RABBITMQ_DEFAULT_PASS=ifmt
+    networks:
+      - ifmt
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672/"]
+      interval: 4s
+      timeout: 20s
+      retries: 5
+      start_period: 30s
+  amqpdemo:
+    image: br.edu.ifmt.amqpdemo
+    container_name: amqpdemo
+    ports:
+      - 8080:8080
+    restart: always
+    networks:
+      - ifmt
+    depends_on:
+      - rabbitmq
+networks:
+  ifmt:
+    external: true

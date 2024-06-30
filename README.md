@@ -1,0 +1,1 @@
+# ifmt-devops-amc-amqp
